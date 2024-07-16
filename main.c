@@ -2,93 +2,74 @@
 #include <stdlib.h>
 #include "cisj.h"
 
-void arvore(int raiz, int s, int dimensao)
+#define RAIZ 0
+
+typedef struct no {
+	int id;
+    int s;
+    int visitado;
+} no;
+
+void imprime_nos(node_set* nodes)
+{
+    printf("nodes: ");
+    for(int i = 0; i < nodes->size; i++)
+    {
+        printf("%d ", nodes->nodes[i]);
+    }
+    printf("\n");
+}
+
+void imprime_nod(no* nod)
+{
+    printf("%d, %d, %d\n", nod->id, nod->s, nod->visitado);
+}
+
+void narvore(int raiz, int s, int dimensao)
 {
     node_set* nodes;
-    printf("%d\n", nodes->nodes[0]);
-    int raiz_antiga;
-
-    while (s < dimensao)
+    no *nod = (no*)malloc(sizeof(no));
+    nod->id = raiz;
+    nod->s = s;
+    if(nod->id == RAIZ)
     {
         nodes = cis(raiz,s);
-        raiz_antiga = raiz;
-        raiz = nodes->nodes[0];
-
-        if (s == 1)
+        narvore(nodes->nodes[0],s,dimensao);
+        while(nod->s < dimensao)
         {
-            printf("%d = folha\n", raiz);
-            raiz = raiz_antiga;
+            nodes = cis(raiz,nod->s+1);
+            nod->s += 1;
+            narvore(nodes->nodes[0],nod->s,dimensao);
+        }
+    }
+    else
+    {
+        if(nod->s > 1)
+        {
+            for(int i = 2; i <= nod->s; i++)
+            {
+                if(!nod->visitado)
+                {
+                    imprime_nod(nod);
+                }
+                nod->visitado = 1;
+                nodes = cis(nod->id,i-1);
+                narvore(nodes->nodes[0],i-1,dimensao);
+            }
         }
         else
         {
-            while (s != 1)
-            {
-                raiz_antiga = raiz;
-                nodes = cis(raiz,s - 1);
-                raiz = nodes->nodes[0];
-
-                if (s == 1)
-                {
-                    printf("%d = folha\n", raiz);
-                    raiz = raiz_antiga;
-                }
-            }    
+            imprime_nod(nod);
         }
-
-        s++;
     }
-    
-    
-    // if(s>1)
-    // {
-    //     arvore(nodes->nodes[0], s-1, dimensao);
-    // }
 
-    // if (s != dimensao)
-    // {
-    //     arvore(raiz, s + 1, dimensao);
-    // }
-    
-    // if (s > 1)
-    // {
-    //     arvore(nodes->nodes[0], s - 1, dimensao);
-    // }
 
-    // if (s == 1)
-    // {
-    //     printf("%d = folha\n", raiz);
-    // }
-    
-        
 }
-
 
 int main()
 {
-    printf("Hello, World!\n"); 
     int raiz = 0;
-    int dimensao = 3;
-    node_set* nodes;
-
-    arvore(0,1,dimensao);
-
-    // for (int i = 1; i <= dimensao; i++)
-    // {
-    //     nodes = cis(raiz,i);
-    //     for (int j = 0; j < nodes->size; j++)
-    //     {   
-    //         // se processo correto
-    //         if(1)
-    //         {
-    //             printf("%d", nodes->nodes[j]);
-                
-    //             break;
-    //         }
-    //     }
-    //     printf("\n");
-    // }
-
-
-    // printf("%d", nodes->nodes[j]);
+    int dimensao = 4;
+    narvore(raiz,1,dimensao);
 
 }
