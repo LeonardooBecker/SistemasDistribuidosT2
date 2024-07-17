@@ -11,6 +11,10 @@ typedef struct no
     int visitado;
 } no;
 
+// Duas variáveis estáticas para armazenar os processos falhos e a quantidade de processos falhos ( e reduzir a passagem de parametro na função principal)
+static int *processos_falhos;
+static int qnt_processos_falhos;
+
 void imprime_nos(node_set *nodes)
 {
     printf("nodes: ");
@@ -28,9 +32,6 @@ void imprime_nod(no *nod)
 
 int verifica_processo_falho(node_set *nodes)
 {
-    int qnt_processos_falhos = 4;
-    int *processosFalhos = (int *)malloc(sizeof(int) * qnt_processos_falhos);
-    processosFalhos = (int[]){1, 4, 8, 9};
     // Todos os processos obtidos pelo cisj
     for (int j = 0; j < nodes->size; j++)
     {
@@ -39,7 +40,7 @@ int verifica_processo_falho(node_set *nodes)
         for (int i = 0; i < qnt_processos_falhos; i++)
         {
             // Seta o processo como falho
-            if (nodes->nodes[j] == processosFalhos[i])
+            if (nodes->nodes[j] == processos_falhos[i])
             {
                 existeFalho = 1;
                 break;
@@ -88,7 +89,14 @@ void narvore(int raiz, int s)
 
 int main()
 {
+    // Variáveis com posição estática na memória para armazenar os processos falhos
+    processos_falhos = (int *)malloc(sizeof(int) * 4);
+    processos_falhos = (int[]){1, 4, 8, 9};
+    qnt_processos_falhos = 4;
+
+    // Hmmm, se organizar certin da pra criar uma struct com raiz dimensao e nós falhos
     int raiz = RAIZ;
     int dimensao = 4;
+
     narvore(raiz, dimensao + 1);
 }
