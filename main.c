@@ -87,6 +87,14 @@ void narvore(int raiz, int s)
     }
 }
 
+typedef struct infos_iniciais
+{
+    int raiz;
+    int dimensao;
+    int *processos_falhos;
+    int qnt_processos_falhos;
+} infos_iniciais;
+
 int main()
 {
     // Variáveis com posição estática na memória para armazenar os processos falhos
