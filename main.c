@@ -86,6 +86,7 @@ void arvore(int raiz, int s)
 
 int main(int argc, char **argv)
 {
+    // Sessão inicial para tratar os dados obtidos por argumemnto
     if(argc < 3){
         printf("Falta argumentos\n");
         return 1;
@@ -104,6 +105,7 @@ int main(int argc, char **argv)
         procs = strtok(NULL, " ");
         count++;
     }
+    // ======   Fim sessão recepção de dados
 
     arvore(raiz, dimensao + 1);
 }
