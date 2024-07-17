@@ -51,6 +51,7 @@ void arvore(int raiz, int s)
     proc_info *processo = (proc_info *)malloc(sizeof(proc_info));
     processo->id = raiz;
     processo->s = s;
+    processo->visitado = 0;
     // Verifica se o processo é um processo correto
     if (processo->id != -1)
     {
@@ -94,16 +95,19 @@ int main(int argc, char **argv)
     int raiz = atoi(argv[1]);
     int dimensao = atoi(argv[2]);
     qnt_processos_falhos = atoi(argv[3]);
-    processos_falhos = (int *)malloc(sizeof(int) * qnt_processos_falhos);
-    memset(processos_falhos, -1, sizeof(int) * qnt_processos_falhos);
-    char *processos = argv[4];
-    int count = 0;
-    char *procs = strtok(processos, " ");
-    while (procs != NULL)
+    if(qnt_processos_falhos > 0)
     {
-        processos_falhos[count] = atoi(procs);
-        procs = strtok(NULL, " ");
-        count++;
+        processos_falhos = (int *)malloc(sizeof(int) * qnt_processos_falhos);
+        memset(processos_falhos, -1, sizeof(int) * qnt_processos_falhos);
+        char *processos = argv[4];
+        int count = 0;
+        char *procs = strtok(processos, " ");
+        while (procs != NULL)
+        {
+            processos_falhos[count] = atoi(procs);
+            procs = strtok(NULL, " ");
+            count++;
+        }
     }
     // ======   Fim sessão recepção de dados
 
