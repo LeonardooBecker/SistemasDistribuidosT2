@@ -51,19 +51,20 @@ void arvore(int raiz, int s)
     proc_info *processo = (proc_info *)malloc(sizeof(proc_info));
     processo->id = raiz;
     processo->s = s;
-    // Verifica se o nó é um processo correto
+    // Verifica se o processo é um processo correto
     if (processo->id != -1)
     {
-        // Se o nó tem s > 1 então ele é um nó interno
+        // Se o processo tem s > 1 então ele é um processo interno
         if (processo->s > 1)
         {
+            // Percorre por todos os s processos possíveis
             for (int i = 2; i <= processo->s; i++)
             {
                 if (!processo->visitado)
                 {
                     imprime_processo(processo);
+                    processo->visitado = 1;
                 }
-                processo->visitado = 1;
                 processos_possiveis = cis(processo->id, i - 1);
                 int no_oficial = verifica_processo_falho(processos_possiveis);
                 arvore(no_oficial, i - 1);
