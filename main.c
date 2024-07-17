@@ -97,6 +97,14 @@ typedef struct infos_iniciais
 
 int main()
 {
+    infos_iniciais *infos;
+    infos = (infos_iniciais *)malloc(sizeof(infos_iniciais));
+    infos->raiz = RAIZ;
+    infos->dimensao = 4;
+    infos->processos_falhos = (int *)malloc(sizeof(int) * 4);
+    infos->processos_falhos = (int[]){1, 4, 8, 9};
+    infos->qnt_processos_falhos = 4;
+
     // Variáveis com posição estática na memória para armazenar os processos falhos
     processos_falhos = (int *)malloc(sizeof(int) * 4);
     processos_falhos = (int[]){1, 4, 8, 9};
