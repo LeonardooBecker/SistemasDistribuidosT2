@@ -58,16 +58,20 @@ void arvore(int raiz, int s)
         if (processo->s > 1)
         {
             // Percorre por todos os s processos possíveis
-            for (int i = 2; i <= processo->s; i++)
+            for (int s = 2; s <= processo->s; s++)
             {
+                // Só volta a imprimir o processo caso ele ainda não tenha sido visitado
                 if (!processo->visitado)
                 {
                     imprime_processo(processo);
                     processo->visitado = 1;
                 }
-                processos_possiveis = cis(processo->id, i - 1);
-                int no_oficial = verifica_processo_falho(processos_possiveis);
-                arvore(no_oficial, i - 1);
+
+                // Obtem os processos possíveis para o processo atual
+                processos_possiveis = cis(processo->id, s - 1);
+                // Obtem o primeiro processo não falho dentre os possíveis
+                int processo_oficial = verifica_processo_falho(processos_possiveis);
+                arvore(processo_oficial, s - 1);
             }
         }
         else
