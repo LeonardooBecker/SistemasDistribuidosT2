@@ -31,22 +31,27 @@ int verifica_processo_falho(node_set *nodes)
     int qnt_processos_falhos = 4;
     int *processosFalhos = (int *)malloc(sizeof(int) * qnt_processos_falhos);
     processosFalhos = (int[]){1, 4, 8, 9};
+    // Todos os processos obtidos pelo cisj
     for (int j = 0; j < nodes->size; j++)
     {
         int existeFalho = 0;
+        // Para cada processo do cisj, percorre todos os processos verificando se este esta na lista de falhos
         for (int i = 0; i < qnt_processos_falhos; i++)
         {
+            // Seta o processo como falho
             if (nodes->nodes[j] == processosFalhos[i])
             {
                 existeFalho = 1;
                 break;
             }
         }
+        // Se o processo não está falho, retorna a identificação deste
         if (!existeFalho)
         {
             return nodes->nodes[j];
         }
     }
+    // Se todos os processos estão falhos, retorna -1 ( sem caminho a seguir )
     return -1;
 }
 
