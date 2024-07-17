@@ -1,33 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "cisj.h"
 
-#define RAIZ 0
-
-typedef struct no
+typedef struct proc_info
 {
     int id;
     int s;
     int visitado;
-} no;
+} proc_info;
 
 // Duas variáveis estáticas para armazenar os processos falhos e a quantidade de processos falhos ( e reduzir a passagem de parametro na função principal)
 static int *processos_falhos;
 static int qnt_processos_falhos;
 
-void imprime_nos(node_set *nodes)
+void imprime_processo(proc_info *processo)
 {
-    printf("nodes: ");
-    for (int i = 0; i < nodes->size; i++)
-    {
-        printf("%d ", nodes->nodes[i]);
-    }
-    printf("\n");
-}
-
-void imprime_nod(no *nod)
-{
-    printf("%d, %d, %d\n", nod->id, nod->s, nod->visitado);
+    printf("%d, %d, %d\n", processo->id, processo->s, processo->visitado);
 }
 
 int verifica_processo_falho(node_set *nodes)
@@ -56,63 +45,60 @@ int verifica_processo_falho(node_set *nodes)
     return -1;
 }
 
-void narvore(int raiz, int s)
+void arvore(int raiz, int s)
 {
-    node_set *nodes;
-    no *nod = (no *)malloc(sizeof(no));
-    nod->id = raiz;
-    nod->s = s;
+    node_set *processos_possiveis;
+    proc_info *processo = (proc_info *)malloc(sizeof(proc_info));
+    processo->id = raiz;
+    processo->s = s;
     // Verifica se o nó é um processo correto
-    if (nod->id != -1)
+    if (processo->id != -1)
     {
         // Se o nó tem s > 1 então ele é um nó interno
-        if (nod->s > 1)
+        if (processo->s > 1)
         {
-            for (int i = 2; i <= nod->s; i++)
+            for (int i = 2; i <= processo->s; i++)
             {
-                if (!nod->visitado)
+                if (!processo->visitado)
                 {
-                    imprime_nod(nod);
+                    imprime_processo(processo);
                 }
-                nod->visitado = 1;
-                nodes = cis(nod->id, i - 1);
-                int no_oficial = verifica_processo_falho(nodes);
-                narvore(no_oficial, i - 1);
+                processo->visitado = 1;
+                processos_possiveis = cis(processo->id, i - 1);
+                int no_oficial = verifica_processo_falho(processos_possiveis);
+                arvore(no_oficial, i - 1);
             }
         }
         else
         {
-            imprime_nod(nod);
+            if (!processo->visitado)
+            {
+                imprime_processo(processo);
+            }
         }
     }
 }
 
-typedef struct infos_iniciais
+int main(int argc, char **argv)
 {
-    int raiz;
-    int dimensao;
-    int *processos_falhos;
-    int qnt_processos_falhos;
-} infos_iniciais;
+    if(argc < 3){
+        printf("Falta argumentos\n");
+        return 1;
+    }
+    int raiz = atoi(argv[1]);
+    int dimensao = atoi(argv[2]);
+    qnt_processos_falhos = atoi(argv[3]);
+    processos_falhos = (int *)malloc(sizeof(int) * qnt_processos_falhos);
+    memset(processos_falhos, -1, sizeof(int) * qnt_processos_falhos);
+    char *processos = argv[4];
+    int count = 0;
+    char *procs = strtok(processos, " ");
+    while (procs != NULL)
+    {
+        processos_falhos[count] = atoi(procs);
+        procs = strtok(NULL, " ");
+        count++;
+    }
 
-int main()
-{
-    infos_iniciais *infos;
-    infos = (infos_iniciais *)malloc(sizeof(infos_iniciais));
-    infos->raiz = RAIZ;
-    infos->dimensao = 4;
-    infos->processos_falhos = (int *)malloc(sizeof(int) * 4);
-    infos->processos_falhos = (int[]){1, 4, 8, 9};
-    infos->qnt_processos_falhos = 4;
-
-    // Variáveis com posição estática na memória para armazenar os processos falhos
-    processos_falhos = (int *)malloc(sizeof(int) * 4);
-    processos_falhos = (int[]){1, 4, 8, 9};
-    qnt_processos_falhos = 4;
-
-    // Hmmm, se organizar certin da pra criar uma struct com raiz dimensao e nós falhos
-    int raiz = RAIZ;
-    int dimensao = 4;
-
-    narvore(raiz, dimensao + 1);
+    arvore(raiz, dimensao + 1);
 }
