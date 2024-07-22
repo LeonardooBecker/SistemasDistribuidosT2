@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "cisj.h"
+
 
 typedef struct proc_info
 {
@@ -10,15 +12,41 @@ typedef struct proc_info
     int visitado;
 } proc_info;
 
-// Duas variáveis estáticas para armazenar os processos falhos e a quantidade de processos falhos ( e reduzir a passagem de parametro na função principal)
+typedef struct arvore_armazenada
+{
+    int identificador;
+    int linha;
+} arvore_armazenada;
+
+// Variáveis estáticas (globais) para armazenar os identificadores e a quantidade de processos falhos (reduzindo a passagem de parametro na função principal)
 static int *processos_falhos;
 static int qnt_processos_falhos;
 
-void imprime_processo(proc_info *processo)
+// Função para imprimir a árvore de armazenamento
+void imprime_arvore(arvore_armazenada *arv, int dimensao)
 {
-    printf("%d, %d, %d\n", processo->id, processo->s, processo->visitado);
+    for (int i = 0; i <= dimensao; i++)
+    {
+        for(int j = 0; j < pow(2, dimensao); j++)
+        {
+            if(arv[j].linha == i)
+            {
+                printf("%2d ", arv[j].identificador);
+            }
+        }
+        printf("\n");
+    }
 }
 
+// Função para imprimir as infomações do processo
+void imprime_processo(proc_info *processo)
+{
+    // Desabilitado
+    if(!1)
+        printf("%d, %d, %d\n", processo->id, processo->s, processo->visitado);
+}
+
+// Função para buscar o primeiro processo não falho dentre os processos possíveis
 int verifica_processo_falho(node_set *nodes)
 {
     // Todos os processos obtidos pelo cisj
@@ -45,7 +73,7 @@ int verifica_processo_falho(node_set *nodes)
     return -1;
 }
 
-void arvore(int raiz, int s)
+void arvore(int raiz, int s, int linha, arvore_armazenada *arv)
 {
     node_set *processos_possiveis;
     proc_info *processo = (proc_info *)malloc(sizeof(proc_info));
@@ -68,11 +96,13 @@ void arvore(int raiz, int s)
                     processo->visitado = 1;
                 }
 
-                // Obtem os processos possíveis para o processo atual
+                // Obtém os processos possíveis para o processo atual
                 processos_possiveis = cis(processo->id, s - 1);
-                // Obtem o primeiro processo não falho dentre os possíveis
+                // Obtém o primeiro processo não falho dentre os possíveis
                 int processo_oficial = verifica_processo_falho(processos_possiveis);
-                arvore(processo_oficial, s - 1);
+                arv[processo_oficial].identificador = processo_oficial;
+                arv[processo_oficial].linha = linha;
+                arvore(processo_oficial, s - 1, linha + 1, arv);
             }
         }
         else
@@ -111,5 +141,16 @@ int main(int argc, char **argv)
     }
     // ======   Fim sessão recepção de dados
 
-    arvore(raiz, dimensao + 1);
+    // Inicializa arvore de armazenamento para imprimir posteriormente
+    arvore_armazenada *arv = (arvore_armazenada *)malloc(sizeof(arvore_armazenada) * pow(2, dimensao));
+    arv[raiz].identificador = raiz;
+    arv[raiz].linha = 0;
+
+    // Incia a recursão de criação da árvore a partir da raiz
+    arvore(raiz, dimensao + 1, 1, arv);
+
+    imprime_arvore(arv, dimensao);
+
+    free(arv);
+    free(processos_falhos);
 }
