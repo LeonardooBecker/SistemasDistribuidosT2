@@ -100,8 +100,11 @@ void arvore(int raiz, int s, int linha, arvore_armazenada *arv)
                 processos_possiveis = cis(processo->id, s - 1);
                 // Obtém o primeiro processo não falho dentre os possíveis
                 int processo_oficial = verifica_processo_falho(processos_possiveis);
-                arv[processo_oficial].identificador = processo_oficial;
-                arv[processo_oficial].linha = linha;
+                if(processo_oficial >= 0)
+                {
+                    arv[processo_oficial].identificador = processo_oficial;
+                    arv[processo_oficial].linha = linha;
+                }
                 arvore(processo_oficial, s - 1, linha + 1, arv);
             }
         }
@@ -143,6 +146,7 @@ int main(int argc, char **argv)
 
     // Inicializa arvore de armazenamento para imprimir posteriormente
     arvore_armazenada *arv = (arvore_armazenada *)malloc(sizeof(arvore_armazenada) * pow(2, dimensao));
+    memset(arv, -1, sizeof(arvore_armazenada) * pow(2, dimensao));  
     arv[raiz].identificador = raiz;
     arv[raiz].linha = 0;
 
