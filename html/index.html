@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+    <head>
+
+        <meta charset="UTF-8">
+        <title>Trabalho 2 SisDis Pedro A e Leonardo B</title>
+    </head>
+
+    <body>
+
+        Pedro Amaral e Leonardo Becker
+        <h1>Trabalho Prático 2</h1>
+
+        Para o trabalho 2 da disciplina, fomos requisitados a fazer uma Árvore Geradora Mínima Autonômica com a lógica do Vcube-2, implementada no trabalho anterior.
+        <br>Para isso, primeiramente criamos uma estrutura <strong>proc_info</strong> para cada processo, que possui as informações <strong>id</strong>, <strong>s</strong>(contém o s específico daquele processo considerando a função C(i,s), usada pelo Vcube) e <strong>visitado</strong>(flag para dizer se algum outro processo já passou por esse processo).  
+        <br><br>Fizemos nossa lógica principal da árvore baseada em recursão, sendo as chamadas com os argumentos raiz, s, linha, e árvore armazenada(usada posteriormente pra imprimir a árvore do jeito certo na tela). Dentro dessa função, Se o processo for correto e seu s for maior do que 1 (Na primeira chamada s é atribuído como <strong> dimensão + 1</strong>), isso quer dizer que não estamos em uma folha da árvore, então temos que ver quais são os caminhos possíveis.
+        <br><br>Depois de marcá-lo como visitado, vemos quais são todos os caminhos possíveis a partir daquela raiz com a função <strong>C(raiz, s - 1)</strong>. Após isso, agora precisamos localizar o primeiro processo correto dentro dos possíveis a se seguir. Em seguida, depois de anotarmos na árvore armazenada o processo e sua linha correspondente para impressão depois, chamamos a função <strong>árvore</strong> novamente, com a <strong>raiz</strong> sendo o primeiro processo correto dos caminhos possíveis, o <strong>s</strong> sendo <strong>s-1</strong> e a linha sendo incrementada em 1, pois descemos um nível na árvore.
+        <br><br>Dessa forma, a recursão lidará com todos os caminhos que podem ser tomados pela primeira raiz passada, e fará o mesmo para cada s-filho passado como parâmetro nas chamadas da mesma. Após terminar todos, usamos a estrutura da árvore passada como parâmetro para imprimi-la de uma maneira que fique visual, por linhas mostrando cada caminho que o processo pai tomou.
+
+        <br><br> <a href="main.c.txt">Código do trabalho 2</a>
+        <br><br>(<strong>Raiz: </strong>0 <strong>Dimensão: </strong>2 <strong>Processos falhos: </strong> Nenhum processo falho) -- <a href="logT2-1.txt">Log 1</a>
+        <br><br>(<strong>Raiz: </strong>0 <strong>Dimensão: </strong>3 <strong>Processos falhos: </strong> Nenhum processo falho) -- <a href="logT2-2.txt">Log 2</a>
+        <br><br>(<strong>Raiz: </strong>0 <strong>Dimensão: </strong>3 <strong>Processos falhos: </strong> Lista de processos falhos: 1, 2, 4, 7) -- <a href="logT2-3.txt">Log 3</a>
+        <br><br>(<strong>Raiz: </strong>7 <strong>Dimensão: </strong>3 <strong>Processos falhos: </strong> 0) -- <a href="logT2-4.txt">Log 4</a>
+        <br><br>(<strong>Raiz: </strong>0 <strong>Dimensão: </strong>4 <strong>Processos falhos: </strong> Nenhum processo falho) -- <a href="logT2-5.txt">Log 5</a>
+
+    </body>
+</html>
