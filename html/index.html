@@ -7,16 +7,18 @@
         <title>Trabalho 2 SisDis Pedro A e Leonardo B</title>
     </head>
 
-    <body>
+    <body style="margin: 10px 40px">
 
         Pedro Amaral e Leonardo Becker
         <h1>Trabalho Prático 2</h1>
 
         Para o trabalho 2 da disciplina, fomos requisitados a fazer uma Árvore Geradora Mínima Autonômica com a lógica do Vcube-2, implementada no trabalho anterior.
-        <br>Para isso, primeiramente criamos uma estrutura <strong>proc_info</strong> para cada processo, que possui as informações <strong>id</strong>, <strong>s</strong>(contém o s específico daquele processo considerando a função C(i,s), usada pelo Vcube) e <strong>visitado</strong>(flag para dizer se algum outro processo já passou por esse processo).  
-        <br><br>Fizemos nossa lógica principal da árvore baseada em recursão, sendo as chamadas com os argumentos raiz, s, linha, e árvore armazenada(usada posteriormente pra imprimir a árvore do jeito certo na tela). Dentro dessa função, Se o processo for correto e seu s for maior do que 1 (Na primeira chamada s é atribuído como <strong> dimensão + 1</strong>), isso quer dizer que não estamos em uma folha da árvore, então temos que ver quais são os caminhos possíveis.
-        <br><br>Depois de marcá-lo como visitado, vemos quais são todos os caminhos possíveis a partir daquela raiz com a função <strong>C(raiz, s - 1)</strong>. Após isso, agora precisamos localizar o primeiro processo correto dentro dos possíveis a se seguir. Em seguida, depois de anotarmos na árvore armazenada o processo e sua linha correspondente para impressão depois, chamamos a função <strong>árvore</strong> novamente, com a <strong>raiz</strong> sendo o primeiro processo correto dos caminhos possíveis, o <strong>s</strong> sendo <strong>s-1</strong> e a linha sendo incrementada em 1, pois descemos um nível na árvore.
-        <br><br>Dessa forma, a recursão lidará com todos os caminhos que podem ser tomados pela primeira raiz passada, e fará o mesmo para cada s-filho passado como parâmetro nas chamadas da mesma. Após terminar todos, usamos a estrutura da árvore passada como parâmetro para imprimi-la de uma maneira que fique visual, por linhas mostrando cada caminho que o processo pai tomou.
+        <br>Dito isso, primeiramente criamos uma estrutura <strong>proc_info</strong> para cada processo, que possui as informações <strong>id</strong>, <strong>s</strong>(contém o s específico daquele processo considerando a função C(i,s), usada pelo Vcube) e <strong>visitado</strong>(flag para dizer se algum outro processo já passou por esse processo/caminho).  
+        <br><br>Fizemos nossa lógica principal da árvore baseada em recursão, sendo as chamadas com os argumentos raiz, s, linha, e árvore armazenada(usada posteriormente para imprimir a árvore formatada). Dentro dessa função, Se o processo for correto e seu <strong>s</strong> for maior do que 1, significa que não estamos em uma folha da árvore, então temos que ver quais são os caminhos possíveis até a sua respectiva folha.
+        <br>
+        <p style="margin-left:30px; font-size: 15px;">Obs .: Na primeira chamada da função, ou seja, raiz da árvore, <strong>s</strong> é atribuído como <strong> dimensão + 1</strong>, o que permite que todos os processos subsequentes a raiz sejam instanciados.</p>
+        Para cada novo processo visitado, primeiramente é feito a marcação de visitado. Após isso, vemos quais são os caminhos(processos corretos) passíveis a ser seguido com a função <strong>C(raiz, s - 1)</strong>. Obtido a lista de processos <strong>C(i,s)</strong>, localizamos o primeiro processo correto dentre eles, em seguida registramos esse processo e sua linha correspondente na <strong>arvore_armazenada</strong>, permitindo assim que chamemos a função <strong>árvore</strong> novamente, com a <strong>raiz</strong> sendo o primeiro processo correto dos <strong>C(i,s)</strong> caminhos possíveis, o <strong>s</strong> sendo <strong>s-1</strong> e a linha sendo incrementada em 1, pois descemos um nível na árvore.
+        <br><br>Dessa forma, a recursão lidará com todos os caminhos que podem ser tomados pela primeira raiz passada, e fará o mesmo para cada s-filho passado como parâmetro nas chamadas da mesma. Após terminar todos, usamos a estrutura da árvore passada como parâmetro para imprimi-la de uma maneira que fique visual por linhas, mostrando cada caminho que o processo pai tomou.
 
         <br><br> <a href="main.c.txt">Código do trabalho 2</a>
         <br><br>(<strong>Raiz: </strong>0 <strong>Dimensão: </strong>2 <strong>Processos falhos: </strong> Nenhum processo falho) -- <a href="logT2-1.txt">Log 1</a>
